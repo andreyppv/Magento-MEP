@@ -70,6 +70,17 @@
                         <input value="<?php echo $this->getMapping()->getOption('google_mapping_separator'); ?>" type="text" name="options[google_mapping_separator]" id="google_mapping_separator" class="input-text"/>
                     </div>
                 </li>
+                <? if ($this->useTwigTemplates() == 1) : ?>
+                <li class="block-checkbox">
+                    <label for="use_template"><?php echo $this->__('Use in Twig template');?></label>
+                    <input type="checkbox" name="use_twig_template" value="1" <?php if ($this->getMapping()->getUseTwigTemplate() == 1) echo 'checked="checked"'; ?> id="use_template" class="input-checkbox">
+                </li>
+                <li id="template_block" <?php if ($this->getMapping()->getUseTwigTemplate() != 1) echo 'style="display: none;"'; ?>>
+                    <div class="input-box">
+                        <textarea name="twig_content_template"> <? echo $this->getMapping()->getTwigContentTemplate() ?> </textarea>
+                    </div>
+                </li>
+                <? endif ?>
                 <li>
                     <div class="input-box">
                         <?php echo $this->getSaveButtonHtml() ?>
@@ -99,6 +110,18 @@
         }
         else{
             $('inheritance_type_block').hide();
+        }
+    }
+
+    $('use_template').observe('change', selectUseTemplate);
+
+    function    selectUseTemplate(event) {
+        var element = event.element();
+        if (element.checked == true) {
+            $('template_block').show();
+        }
+        else{
+            $('template_block').hide();
         }
     }
 

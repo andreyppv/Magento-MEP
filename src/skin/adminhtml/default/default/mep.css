@@ -181,9 +181,15 @@
 }
 
 .chosen-container .chosen-drop,
-.chosen-container .chosen-choices{
+.chosen-container .chosen-choices,
+.mapping-dialog textarea {
     width: 470px;
 }
+
+.mapping-dialog textarea.template {
+    height: 60px;
+}
+
 /* MEP Add attribute dialog box styles  END */
 
 .mep-version {

@@ -20,6 +20,12 @@ var mepAttributeSettingsDialog = {
             Windows.focus('widget_window');
             return;
         }
+        var parameters = {};
+        var useTwigTemplatesField = $('use_twig_templates');
+        if (useTwigTemplatesField) {
+            parameters.use_twig_templates = useTwigTemplatesField.value == 1 ? '1' : '0';
+        }
+
         this.dialogWindow = Dialog.info(null, {
             draggable:false,
             resizable:false,
@@ -39,6 +45,7 @@ var mepAttributeSettingsDialog = {
         });
         new Ajax.Updater('modal_dialog_message', widgetUrl, {
             evalScripts: true,
+            parameters: parameters,
             onComplete: function(response) {
                 $('widget_window').setStyle({
                     display: 'block'

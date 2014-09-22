@@ -41,6 +41,14 @@ class Flagbit_MEP_Block_Adminhtml_Profile_Popup
         return $this->getRequest()->getParam('profile_id', null);
     }
 
+    public function useTwigTemplates() {
+        $request = $this->getRequest();
+        if ($request->has('use_twig_templates')) {
+            return $request->get('use_twig_templates');
+        }
+        return Mage::getModel('mep/profile')->load($this->getProfileId())->getUseTwigTemplates();
+    }
+
     public function getMapping()
     {
         if (!$this->_mapping) {

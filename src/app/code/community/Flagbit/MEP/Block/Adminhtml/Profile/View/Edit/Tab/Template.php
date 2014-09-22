@@ -31,7 +31,7 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tab_Template extends Mage_Ad
                 'style' => 'width: 600px; height: 200px',
                 'name' => 'twig_header_template',
             )
-        );
+        )->setReadonly(true, true);
 
         $fieldset->addField(
             'twig_content_template',
@@ -41,7 +41,7 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tab_Template extends Mage_Ad
                 'style' => 'width: 600px; height: 200px',
                 'name' => 'twig_content_template',
             )
-        );
+        )->setReadonly(true, true);
 
         $fieldset->addField(
             'twig_footer_template',
