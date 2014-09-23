@@ -129,6 +129,14 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Mapping_Grid extends Mage_Adminht
             'sortable' => false
         ));
 
+        $this->addColumn('twig_content_template', array(
+            'header' => Mage::helper('mep')->__('Twig Field'),
+            'align' => 'left',
+            'index' => 'twig_content_template',
+            'filter' => false,
+            'sortable' => false
+        ));
+
         $this->addColumn('inheritance_type', array(
             'header' => Mage::helper('mep')->__('Inheritance type'),
             'align' => 'left',
