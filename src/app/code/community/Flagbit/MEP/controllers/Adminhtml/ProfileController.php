@@ -280,4 +280,10 @@ class Flagbit_MEP_Adminhtml_ProfileController extends Mage_Adminhtml_Controller_
 
     }
 
+
+    function generateTemplateAction() {
+        echo 'generateTemplateAction called';
+        exit;
+    }
+
 }
