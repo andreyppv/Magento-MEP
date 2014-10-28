@@ -96,6 +96,19 @@ class Flagbit_MEP_Model_Profile extends Mage_Core_Model_Abstract
         return parent::_beforeSave();
     }
 
+    /**
+     * Processing object after save data
+     *
+     * @return Mage_Core_Model_Abstract
+     */
+    function _afterSave() {
+        if (is_string($this->getSettings())) {
+            $this->setSettings(unserialize($this->getSettings()));
+        }
+
+        return parent::_afterSave();
+    }
+
 
     /**
      * Create duplicate
