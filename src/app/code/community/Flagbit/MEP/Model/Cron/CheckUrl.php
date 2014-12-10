@@ -12,21 +12,21 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
 
     public function run()
     {
-
-        $this->_timeStart = microtime(true);
+        $this->_timeStart = microtime();
 
         $this->importFiles();
 
-        $urls = Mage::getModel('mep/urls')->getCollection();
-        $urls->addFieldToFilter('last_test_date', array('lt' => date('Y-m-d H:i:s', strtotime(Mage::getModel('core/date')->gmtDate() . ' -1 week'))));
-
         $index = 0;
-        $limitProducts = 10;
         $maxThreads = 5;
 
+        $urls = Mage::getModel('mep/urls')->getCollection();
+        $urls->addFieldToFilter('last_test_date', array('lt' => date('Y-m-d H:i:s', strtotime(Mage::getModel('core/date')->gmtDate() . ' -1 week'))));
         $size = $urls->getSize();
 
-        Mage::log($size, null, 'urlchecker.log');
+        $average = ceil($size / $maxThreads);
+        $limitProducts = $average;
+
+        $urls->setPageSize($limitProducts);
 
         while(true){
             $index++;
@@ -47,7 +47,9 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
             $this->_cleanUpThreads();
         }
 
-        $this->_timeEnd = microtime(true);
+        $this->_checkUrls(0, $urls->getSize(), $urls);
+
+        $this->_timeEnd = microtime();
 
         $this->updateJobs();
     }
@@ -102,10 +104,9 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
         $core_read->closeConnection();
         $core_read->getConnection();
 
-        $urls->setPageSize($limitProducts)->setCurPage($offsetProducts);
-        Mage::log($offsetProducts . ': ' . (string)$urls->load()->getSelect(), null, 'urlchecker.log');
-        $str = '';
+        $urls->setCurPage($offsetProducts);
         foreach ($urls as $url) {
+
             $code = '510';
             $count = 0;
             do {
@@ -131,17 +132,33 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
                 $url->setAvailable(0);
             }
             $url->save();
-            $checkedProfiles = $this->_checkedProfiles;
-            if(!in_array($url->getProfile(), $checkedProfiles)) $checkedProfiles[] = $url->getProfile();
-            $this->_checkedProfiles = $checkedProfiles;
 
-            $str .= $url->getId() . ' - ';
+            if(!in_array($url->getProfile(), $this->getCheckedProfiles())) $this->setCheckedProfiles($url->getProfile());
         }
-        Mage::log($offsetProducts . ': ' . $str, null, 'urlchecker.log');
+
+        if ($urls->getCurPage() < $offsetProducts) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getCheckedProfiles() {
+        return $this->_checkedProfiles;
+    }
+
+    public function setCheckedProfiles($checkedProfiles) {
+        $this->_checkedProfiles[] = $checkedProfiles;
     }
 
     function updateJobs() {
-        Mage::log($this->_checkedProfiles, null, 'urlchecker.log');
+        /**
+         * IMPORTANT TO PREVENT MySql to go away
+         */
+        $core_read = Mage::getSingleton('core/resource')->getConnection('core_read');
+        /** @var Varien_Db_Adapter_Pdo_Mysql $core_read */
+        $core_read->closeConnection();
+        $core_read->getConnection();
+
         foreach ($this->_checkedProfiles as $profile) {
             $urls = Mage::getModel('mep/urls')->getCollection();
             $urls->addFieldToFilter('available', 0);
