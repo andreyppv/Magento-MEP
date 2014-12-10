@@ -146,8 +146,8 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
         return $this->_checkedProfiles;
     }
 
-    public function setCheckedProfiles($checkedProfiles) {
-        $this->_checkedProfiles[] = $checkedProfiles;
+    public function setCheckedProfiles($checkedProfile) {
+        $this->_checkedProfiles[] = $checkedProfile;
     }
 
     function updateJobs() {
@@ -168,11 +168,11 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
                 $job->setProfile($profile);
                 $job->setBad($urls->count());
                 $job->setExecuted(date('Y-m-d H:i:s'));
-                $job->setTime(($this->_timeEnd - $this->_timeStart) * 1000);
+                $job->setTime((($this->_timeEnd - $this->_timeStart) * 1000) * -1);
             } else {
                 $job->setBad($urls->count());
                 $job->setExecuted(date('Y-m-d H:i:s'));
-                $job->setTime(($this->_timeEnd - $this->_timeStart) * 1000);
+                $job->setTime((($this->_timeEnd - $this->_timeStart) * 1000) * -1);
             }
             $job->save();
         }

@@ -4,6 +4,7 @@ class   Flagbit_MEP_Block_Adminhtml_Profile_View_Grid_Url_Time_Renderer extends 
 {
     public function render(Varien_Object $row)
     {
-        return $row->getData('executed') . ' (in ' . $row->getData('time') . ' sec)';
+        if($row->getData('executed') != '') return $row->getData('executed') . ' (in ' . $row->getData('time') . ' sec)';
+        return '';
     }
 }
