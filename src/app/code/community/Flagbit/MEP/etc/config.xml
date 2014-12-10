@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Flagbit_MEP>
-            <version>0.9.6</version>
+            <version>0.9.7</version>
         </Flagbit_MEP>
     </modules>
 
@@ -30,6 +30,12 @@
                     <profile>
                         <table>mep_profile</table>
                     </profile>
+                    <urls>
+                        <table>mep_urls</table>
+                    </urls>
+                    <urls_jobs>
+                        <table>mep_urls_jobs</table>
+                    </urls_jobs>
                     <mapping>
                         <table>mep_profile_attribute</table>
                     </mapping>

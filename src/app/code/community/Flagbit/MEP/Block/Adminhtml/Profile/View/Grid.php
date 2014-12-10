@@ -28,6 +28,7 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Grid extends Mage_Adminhtml_Block
     {
         /* @var $collection Flagbit_MEP_Model_Profil */
         $collection = Mage::getModel('mep/profile')->getCollection();
+        $collection->getSelect()->joinLeft( array('_urls_jobs'=> 'mep_urls_jobs'), 'main_table.id = _urls_jobs.profile' , array('_urls_jobs.bad', '_urls_jobs.executed', '_urls_jobs.time'));
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -91,6 +92,16 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Grid extends Mage_Adminhtml_Block
             'header'    => Mage::helper('cms')->__('Execution Frequency'),
             'index'     => 'mep_cron_frequency',
             'renderer'  => 'mep/adminhtml_profile_view_grid_cron_renderer'
+        ));
+
+        $this->addColumn('Bad urls', array(
+            'header'    => Mage::helper('cms')->__('Wrong Urls'),
+            'index'     => 'bad'
+        ));
+
+        $this->addColumn('Last check (Urls)', array(
+            'header'    => Mage::helper('cms')->__('Last check (Urls)'),
+            'renderer'  => 'mep/adminhtml_profile_view_grid_url_time_renderer'
         ));
 
         $this->addColumn('action', array(

@@ -813,6 +813,8 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
             $attrValue = $item->getProductUrl(false);
         }
 
+        $this->saveUrl($attrValue, 'product');
+
         return $attrValue;
     }
 
@@ -901,6 +903,9 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
             $image_type = 'image';
         }
         $attrValue = $item->getMediaConfig()->getMediaUrl($item->getData($image_type));
+
+        $this->saveUrl($attrValue, 'image');
+
         return $attrValue;
     }
 
@@ -1116,6 +1121,27 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
             }
         }
         return $options;
+    }
+
+    protected function saveUrl($url, $type)
+    {
+
+        if (!$this->_parameters['isAjax']) {
+            $file_path = Mage::getConfig()->getOptions()->getBaseDir() . DS . $this->getProfile()->getFilepath() . DS . 'url_to_check_' . $this->getProfileId() . '.csv';
+
+            $mage_csv = new Varien_File_Csv();
+            $products_row = array();
+            $data = array();
+            $data['url'] = $url;
+            $data['type'] = $type;
+            $products_row[] = $data;
+
+            $fh = fopen($file_path, 'a');
+            foreach ($products_row as $dataRow) {
+                $mage_csv->fputcsv($fh, $dataRow, ',', '"');
+            }
+            fclose($fh);
+        }
     }
 
 }

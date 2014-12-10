@@ -59,6 +59,12 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tabs extends Mage_Adminhtml_
             ));
         }
 
+        $this->addTab('urls', array(
+            'label' => Mage::helper('mep')->__('Bad urls'),
+            'title' => Mage::helper('mep')->__('Bad urls'),
+            'content' => $this->getLayout()->createBlock('mep/adminhtml_profile_view_urls')->toHtml(),
+        ));
+
         $this->setActiveTab($this->getRequest()->get('tab'));
 
         return parent::_beforeToHtml();
