@@ -85,6 +85,7 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
                         $url->setUrl($row[0]);
                         $url->setProfile($profile->getId());
                         $url->setType($row[1]);
+                        $url->setItemid($row[2]);
                         $url->setLast_test_date(date('Y-m-d H:i:s', 0));
                     }
                     $url->save();
@@ -112,7 +113,7 @@ class   Flagbit_MEP_Model_Cron_CheckUrl
             do {
                 $success = true;
                 try {
-                    $client = new Varien_Http_Client($url->getUrl());
+                    $client = new Varien_Http_Client($url->getUrl(), array('maxredirects' => 0, 'timeout' => 10));
                     $req = $client->request('GET');
                     if (!empty($req)) {
                         $code = $req->getStatus();

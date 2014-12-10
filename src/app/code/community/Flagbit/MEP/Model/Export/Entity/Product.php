@@ -813,7 +813,7 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
             $attrValue = $item->getProductUrl(false);
         }
 
-        $this->saveUrl($attrValue, 'product');
+        $this->saveUrl($attrValue, 'product', $item->getId());
 
         return $attrValue;
     }
@@ -904,7 +904,7 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
         }
         $attrValue = $item->getMediaConfig()->getMediaUrl($item->getData($image_type));
 
-        $this->saveUrl($attrValue, 'image');
+        $this->saveUrl($attrValue, 'image', $item->getId());
 
         return $attrValue;
     }
@@ -1123,7 +1123,7 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
         return $options;
     }
 
-    protected function saveUrl($url, $type)
+    protected function saveUrl($url, $type, $itemid)
     {
 
         if (!$this->_parameters['isAjax']) {
@@ -1134,6 +1134,7 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
             $data = array();
             $data['url'] = $url;
             $data['type'] = $type;
+            $data['itemid'] = $itemid;
             $products_row[] = $data;
 
             $fh = fopen($file_path, 'a');

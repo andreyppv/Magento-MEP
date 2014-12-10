@@ -71,6 +71,12 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Urls_Grid extends Mage_Adminhtml_
             'index' => 'apache_code'
         ));
 
+        $this->addColumn('apache_code', array(
+            'header' => Mage::helper('mep')->__('Product'),
+            'index' => 'itemid',
+            'renderer'  => 'mep/adminhtml_profile_view_grid_url_product_renderer',
+        ));
+
         $this->addColumn('last_test_date', array(
             'header' => Mage::helper('mep')->__('Last test'),
             'index' => 'last_test_date'
