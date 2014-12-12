@@ -15,11 +15,20 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tab_Template extends Mage_Ad
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
-
         $fieldset = $form->addFieldset(
             'mep_data_xslt_form',
             array(
                 'legend' => Mage::helper('mep')->__('Template') . ' <small><i>' . Mage::helper('mep')->__('The template uses Twig') . '</i></small>'
+            )
+        );
+
+        $fieldset->addField(
+            'template_id',
+            'select',
+            array(
+                'label' => Mage::helper('mep')->__('Template Version'),
+                'name' => 'template_id',
+                'values' => Mage::registry('mep_profile_data')->getData('template_collection')->toSelectArray()
             )
         );
 

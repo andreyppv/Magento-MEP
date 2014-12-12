@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Flagbit_MEP>
-            <version>0.9.6</version>
+            <version>0.9.7</version>
         </Flagbit_MEP>
     </modules>
 
@@ -57,6 +57,9 @@
                     <shipping_attribute>
                         <table>mep_shipping_attribute</table>
                     </shipping_attribute>
+                    <template>
+                        <table>mep_template_version</table>
+                    </template>
                 </entities>
             </mep_mysql4>
         </models>

@@ -161,7 +161,7 @@ class Flagbit_MEP_Helper_Shipping extends Mage_Core_Helper_Abstract
 
         if ($result) {
             $shippingRates = $result->getAllRates();
-
+            $rate = null;
             foreach ($shippingRates as $shippingRate) {
                 $rate = Mage::getModel('sales/quote_address_rate')
                     ->importShippingRate($shippingRate);

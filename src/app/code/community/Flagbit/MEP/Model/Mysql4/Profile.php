@@ -34,6 +34,8 @@ class Flagbit_MEP_Model_Mysql4_Profile extends Mage_Core_Model_Mysql4_Abstract
                 $object->setData($attrCode, unserialize($object->getData($attrCode)));
             }
         }
+        $this->loadTemplate($object);
+        $this->loadTemplates($object);
         return $this;
     }
 
@@ -64,5 +66,43 @@ class Flagbit_MEP_Model_Mysql4_Profile extends Mage_Core_Model_Mysql4_Abstract
 
     public function  saveField($field, $value, $profileId) {
         $this->_getWriteAdapter()->update($this->getMainTable(), array($field => $value), 'id = ' . $profileId);
+    }
+
+    /**
+     * Load the current template version in the profile
+     *
+     * @param Flagbit_MEP_Model_Profile $object
+     */
+    public function loadTemplate($object)
+    {
+        if (!is_object($object)) {
+            return ;
+        }
+        $id = $object->getTemplateId();
+        $template = Mage::getModel('mep/template')->load($id);
+        if ($template) {
+            $object->setData('twig_content_template', $template->getTemplateContent());
+            $object->setData('twig_header_template', $template->getTemplateHeader());
+            $object->setData('twig_footer_template', $template->getTemplateFooter());
+        }
+    }
+
+    /**
+     * Load all template versions in the profile
+     *
+     * @param Flagbit_MEP_Model_Profile $object
+     */
+    public function loadTemplates($object)
+    {
+        if (!is_object($object)) {
+            return ;
+        }
+        $id = $object->getId();
+        /** @var Flagbit_MEP_Model_Mysql4_Template_Collection $templates */
+        $templates = Mage::getModel('mep/template')
+            ->getCollection()
+            ->addFieldToFilter('template_profile_id', array('eq' => $object->getId()));
+        $templates->setOrder('template_version');
+        $object->setData('template_collection', $templates);
     }
 }
