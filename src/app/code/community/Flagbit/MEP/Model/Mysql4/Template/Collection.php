@@ -12,14 +12,19 @@ class   Flagbit_MEP_Model_Mysql4_Template_Collection extends Mage_Core_Model_Mys
         $this->_init('mep/template');
     }
 
-    public function toSelectArray()
+    public function toSelectArray($items = null)
     {
+        if (is_null($items)) {
+            $items = $this->getItems();
+        }
         $select = array();
-        foreach ($this->getItems() as $item) {
+        $dateFormat = 'd.m.Y';
+        foreach ($items as $item) {
             /** @var Flagbit_Mep_Model_Template $item */
+            $date = Mage::getModel('core/date')->date($dateFormat, $item->getTemplateDate());
             $select[] = array(
                 'value' => $item->getId(),
-                'label' => 'V.' . $item->getTemplateVersion()
+                'label' => 'V.' . $item->getTemplateVersion() . ' - ' . $date
             );
         }
         return $select;

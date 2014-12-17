@@ -63,7 +63,6 @@ class Flagbit_MEP_Adminhtml_ProfileController extends Mage_Adminhtml_Controller_
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('mep/profile')->load((int)$id);
 
-
         if ($model->getId() || !$id) {
             Mage::register('mep_profil', $model);
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
@@ -74,7 +73,6 @@ class Flagbit_MEP_Adminhtml_ProfileController extends Mage_Adminhtml_Controller_
             }
 
             Mage::register('mep_profile_data', $model);
-
             $this->_initAction();
             $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
             $this->_addContent($this->getLayout()->createBlock('mep/adminhtml_profile_view_edit'));
@@ -115,6 +113,7 @@ class Flagbit_MEP_Adminhtml_ProfileController extends Mage_Adminhtml_Controller_
             Mage::getSingleton('adminhtml/session')->setFormData($data);
 
             try {
+                $model->setOrigData();
                 $model->setData($data);
                 $model->save();
 

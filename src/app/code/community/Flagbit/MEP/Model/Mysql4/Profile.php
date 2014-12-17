@@ -24,6 +24,7 @@ class Flagbit_MEP_Model_Mysql4_Profile extends Mage_Core_Model_Mysql4_Abstract
 
         $now = Varien_Date::now(false);
         $object->setUpdatedAt($now);
+        $this->saveTemplate($object);
     }
 
 
@@ -84,6 +85,7 @@ class Flagbit_MEP_Model_Mysql4_Profile extends Mage_Core_Model_Mysql4_Abstract
             $object->setData('twig_content_template', $template->getTemplateContent());
             $object->setData('twig_header_template', $template->getTemplateHeader());
             $object->setData('twig_footer_template', $template->getTemplateFooter());
+            $object->setData('template_version', $template->getTemplateVersion());
         }
     }
 
@@ -97,12 +99,37 @@ class Flagbit_MEP_Model_Mysql4_Profile extends Mage_Core_Model_Mysql4_Abstract
         if (!is_object($object)) {
             return ;
         }
-        $id = $object->getId();
         /** @var Flagbit_MEP_Model_Mysql4_Template_Collection $templates */
         $templates = Mage::getModel('mep/template')
             ->getCollection()
             ->addFieldToFilter('template_profile_id', array('eq' => $object->getId()));
         $templates->setOrder('template_version');
-        $object->setData('template_collection', $templates);
+        $object->setData('template_collection', $templates->toSelectArray());
+    }
+
+    /**
+     * @param Flagbit_MEP_Model_Profile $object
+     */
+    public function saveTemplate($object)
+    {
+        if ($object->getOrigData('twig_content_template') != $object->getData('twig_content_template')
+        || $object->getOrigData('twig_header_template') != $object->getData('twig_header_template')
+        || $object->getOrigData('twig_footer_template') != $object->getData('twig_footer_template')) {
+            $newTemplate = Mage::getModel('mep/template');
+            $newTemplate->setData(
+                array(
+                    'template_version' => $object->getOrigData('template_version') + 1,
+                    'template_header' => $object->getData('twig_header_template'),
+                    'template_footer' => $object->getData('twig_footer_template'),
+                    'template_content' => $object->getData('twig_content_template'),
+                    'template_profile_id' => $object->getId(),
+                    'template_date' => Varien_Date::now(false)
+                )
+            );
+            $newTemplate->save();
+            // IMPORTANT TO PREVENT THE TEMPLATE TO BE SAVED TWO TIMES
+            $object->setOrigData();
+            $object->setTemplateId($newTemplate->getId());
+        }
     }
 }

@@ -28,7 +28,7 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tab_Template extends Mage_Ad
             array(
                 'label' => Mage::helper('mep')->__('Template Version'),
                 'name' => 'template_id',
-                'values' => Mage::registry('mep_profile_data')->getData('template_collection')->toSelectArray()
+                'values' => Mage::registry('mep_profile_data')->getData('template_collection')
             )
         );
 
