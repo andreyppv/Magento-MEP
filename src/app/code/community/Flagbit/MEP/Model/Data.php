@@ -80,6 +80,7 @@ class Flagbit_MEP_Model_Data extends Mage_Catalog_Model_Convert_Parser_Product
             }
         }
 
+        uasort($attributes, array($this, '_sortValuesForForm'));
         return $attributes;
     }
 
@@ -155,6 +156,11 @@ class Flagbit_MEP_Model_Data extends Mage_Catalog_Model_Convert_Parser_Product
         }
 
         return $options;
+    }
+
+    protected function _sortValuesForForm($a, $b)
+    {
+        return strcasecmp($a, $b);
     }
 
 }
