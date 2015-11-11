@@ -142,6 +142,17 @@ class Flagbit_MEP_Block_Adminhtml_Profile_View_Edit_Tab_Format extends Mage_Admi
             )
         );
 
+        $fieldset->addField(
+            'remove_empty_lines',
+            'select',
+            array(
+                'label' => Mage::helper('mep')->__('Remove empty lines from output'),
+                'name' => 'remove_empty_lines',
+                'options' => $this->_getYesNoOptionsHash(),
+                'note' => 'If YES then empty lines will NOT added to the output.'
+            )
+        );
+
         $form->setValues(Mage::helper('mep')->getCurrentProfileData());
 
         $profilData = Mage::helper('mep')->getCurrentProfileData();

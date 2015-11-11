@@ -50,6 +50,8 @@ class Flagbit_MEP_Model_Export_Adapter_Twig extends Mage_ImportExport_Model_Expo
 
     protected $_enclosure;
 
+    protected $_removeemptyline;
+
     /**
      * Object destructor.
      *
@@ -185,6 +187,16 @@ class Flagbit_MEP_Model_Export_Adapter_Twig extends Mage_ImportExport_Model_Expo
         return $this;
     }
 
+    /**
+     * @param string $removeemptyline
+     * @return \Flagbit_MEP_Model_Export_Adapter_Csv
+     */
+    public function setRemoveEmptyLine($removeemptyline)
+    {
+        $this->_removeemptyline = $removeemptyline;
+        return $this;
+    }
+
     public function setHeaderIsDisabled()
     {
         $this->_headerDisabled = true;
@@ -213,8 +225,17 @@ class Flagbit_MEP_Model_Export_Adapter_Twig extends Mage_ImportExport_Model_Expo
             $result = iconv ( "UTF-8", $this->_encoding, $result );
         }
 
-        fwrite($this->_fileHandler, trim($result).PHP_EOL);
+        if($this->removeEmptyRow($result) == 0) {
+            fwrite($this->_fileHandler, trim($result).PHP_EOL);
+        }
         return $this;
+    }
+
+    public function removeEmptyRow($result) {
+        if($this->_removeemptyline == 1 && empty(trim($result))) {
+            return 1;
+        }
+        return 0;
     }
 
     /**

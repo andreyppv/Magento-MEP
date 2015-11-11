@@ -131,6 +131,9 @@ class Flagbit_MEP_Model_Export_Entity_Product extends Mage_ImportExport_Model_Ex
         $writer->setDelimiter($obj_profile->getDelimiter());
         $writer->setConfigurableDelimiter($this->_configurable_delimiter);
         $writer->setEnclosure($obj_profile->getEnclose());
+        if (isset($obj_profile['remove_empty_lines'])) {
+            $writer->setRemoveEmptyLine($obj_profile['remove_empty_lines']);
+        }
         $writer->setEncoding($encoding);
 
         // add Twig Templates
